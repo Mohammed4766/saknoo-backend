@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Saknoo.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using Saknoo.Infrastructure.Data;
 namespace Saknoo.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250425095009_Add_Cities_Neighborhoods_Nationalities_And_Ad_User_Updates")]
+    partial class Add_Cities_Neighborhoods_Nationalities_And_Ad_User_Updates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,9 +230,14 @@ namespace Saknoo.Infrastructure.Migrations
                     b.Property<int>("NeighborhoodId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("NeighborhoodId1")
+                        .HasColumnType("int");
+
                     b.HasKey("AdId", "NeighborhoodId");
 
                     b.HasIndex("NeighborhoodId");
+
+                    b.HasIndex("NeighborhoodId1");
 
                     b.ToTable("AdNeighborhood");
                 });
@@ -486,10 +494,14 @@ namespace Saknoo.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Saknoo.Domain.Entities.Neighborhood", "Neighborhood")
-                        .WithMany("AdNeighborhoods")
+                        .WithMany()
                         .HasForeignKey("NeighborhoodId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Saknoo.Domain.Entities.Neighborhood", null)
+                        .WithMany("AdNeighborhoods")
+                        .HasForeignKey("NeighborhoodId1");
 
                     b.Navigation("Ad");
 
