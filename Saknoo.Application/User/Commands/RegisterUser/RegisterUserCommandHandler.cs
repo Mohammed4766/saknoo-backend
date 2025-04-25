@@ -12,7 +12,13 @@ public class RegisterUserCommandHandler(UserManager<ApplicationUser> userManager
 
     public async Task<AuthResultDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        var user = new ApplicationUser { PhoneNumber = request.PhoneNumber, UserName = request.PhoneNumber };
+        var user = new ApplicationUser
+        {
+            PhoneNumber = request.PhoneNumber,
+            UserName = request.PhoneNumber,
+            NationalityId = request.NationalityId
+        };
+
         var result = await userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
             return new AuthResultDto { Succeeded = false, Errors = result.Errors.Select(e => e.Description) };
