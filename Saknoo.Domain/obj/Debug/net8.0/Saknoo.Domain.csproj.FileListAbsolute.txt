@@ -1,0 +1,13 @@
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/bin/Debug/net8.0/Saknoo.Domain.deps.json
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/bin/Debug/net8.0/Saknoo.Domain.dll
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/bin/Debug/net8.0/Saknoo.Domain.pdb
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/obj/Debug/net8.0/Saknoo.Domain.csproj.AssemblyReference.cache
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/obj/Debug/net8.0/Saknoo.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/obj/Debug/net8.0/Saknoo.Domain.AssemblyInfoInputs.cache
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/obj/Debug/net8.0/Saknoo.Domain.AssemblyInfo.cs
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/obj/Debug/net8.0/Saknoo.Domain.csproj.CoreCompileInputs.cache
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/obj/Debug/net8.0/Saknoo.Domain.sourcelink.json
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/obj/Debug/net8.0/Saknoo.Domain.dll
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/obj/Debug/net8.0/refint/Saknoo.Domain.dll
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/obj/Debug/net8.0/Saknoo.Domain.pdb
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Domain/obj/Debug/net8.0/ref/Saknoo.Domain.dll
