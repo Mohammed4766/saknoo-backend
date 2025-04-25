@@ -1,0 +1,6 @@
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Infrastructure/obj/Debug/net9.0/Saknoo.Infrastructure.csproj.AssemblyReference.cache
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Infrastructure/obj/Debug/net9.0/Saknoo.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Infrastructure/obj/Debug/net9.0/Saknoo.Infrastructure.AssemblyInfoInputs.cache
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Infrastructure/obj/Debug/net9.0/Saknoo.Infrastructure.AssemblyInfo.cs
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Infrastructure/obj/Debug/net9.0/Saknoo.Infrastructure.csproj.CoreCompileInputs.cache
+/Users/mhmdalnzy/Desktop/SaknooApp/Saknoo.Infrastructure/obj/Debug/net9.0/Saknoo.Infrastructure.sourcelink.json

@@ -1,6 +1,37 @@
-@Saknoo.API_HostAddress = http://localhost:5200
+@SaknooAPI_HostAddress = http://localhost:5200
 
-GET {{Saknoo.API_HostAddress}}/weatherforecast/
+
+###
+POST  {{SaknooAPI_HostAddress}}/api/auth/register
+Content-Type: application/json
 Accept: application/json
+
+{
+"PhoneNumber": "0506984762",
+"Password": "Aa0506984766@"
+}
+
+###
+
+###
+POST  {{SaknooAPI_HostAddress}}/api/auth/Login
+Content-Type: application/json
+Accept: application/json
+
+{
+"PhoneNumber": "0506984766",
+"Password": "Aa0506984766@"
+}
+
+###
+
+###
+POST  {{SaknooAPI_HostAddress}}/api/auth/refresh
+Content-Type: application/json
+Accept: application/json
+
+{
+"RefreshToken": "lcje25ZEc71XEryq1DpQPPe2D2XgDOfybodXOptTKh6pjy4N2rPrjoxAsbWWo5v5E2dVso0KkeDiWLkKQ8Hobw=="
+}
 
 ###
