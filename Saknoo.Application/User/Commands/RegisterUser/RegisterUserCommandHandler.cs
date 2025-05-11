@@ -16,13 +16,23 @@ public class RegisterUserCommandHandler(UserManager<ApplicationUser> userManager
         {
             PhoneNumber = request.PhoneNumber,
             UserName = request.PhoneNumber,
-            NationalityId = request.NationalityId
+            NationalityId = request.NationalityId,
+            FullName = request.FullName,
+            Gender = request.Gender,
+
         };
 
         var result = await userManager.CreateAsync(user, request.Password);
         if (!result.Succeeded)
-            return new AuthResultDto { Succeeded = false, Errors = result.Errors.Select(e => e.Description) };
+        {
+            var errors = result.Errors.Select(e =>
+                e.Code == "DuplicateUserName"
+                ? "Phone number is already in use."
+                : e.Description
+            );
 
+            return new AuthResultDto { Succeeded = false, Errors = result.Errors.Select(e => e.Description) };
+        }
         var (accessToken, refreshToken) = await tokenService.GenerateTokensAsync(user);
 
         return new AuthResultDto

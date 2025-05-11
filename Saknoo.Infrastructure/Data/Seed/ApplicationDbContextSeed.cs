@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Saknoo.Domain.Constants;
 using Saknoo.Domain.Entities;
 
@@ -9,6 +10,10 @@ public class ApplicationDbContextSeed(ApplicationDbContext dbContext) : IApplica
 {
     public async Task Seed()
     {
+        if(dbContext.Database.GetPendingMigrations().Any())
+        {
+            await dbContext.Database.MigrateAsync();
+        }
 
         if (!dbContext.Roles.Any())
         {
@@ -34,6 +39,14 @@ public class ApplicationDbContextSeed(ApplicationDbContext dbContext) : IApplica
         {
             var neighborhoods = GetNeighborhoods();
             await dbContext.Neighborhoods.AddRangeAsync(neighborhoods);
+            await dbContext.SaveChangesAsync();
+        }
+
+
+        if (!dbContext.MatchingQuestions.Any())
+        {
+            var MatchingQuestions = GetMatchingQuestions();
+            await dbContext.MatchingQuestions.AddRangeAsync(MatchingQuestions);
             await dbContext.SaveChangesAsync();
         }
     }
@@ -69,7 +82,6 @@ public class ApplicationDbContextSeed(ApplicationDbContext dbContext) : IApplica
         new() { Name = "الأردن" },
     ];
     }
-
 
     private IEnumerable<City> GetCities()
     {
@@ -176,4 +188,129 @@ public class ApplicationDbContextSeed(ApplicationDbContext dbContext) : IApplica
     };
     }
 
+    private IEnumerable<MatchingQuestion> GetMatchingQuestions()
+    {
+        return new List<MatchingQuestion>
+        {
+              new MatchingQuestion
+                {
+            QuestionText = "كم دخلك الشهري؟",
+            Type = QuestionType.Choice,
+            Options = new List<MatchingOption>
+            {
+                new MatchingOption { Text = "أقل من 5 آلاف" },
+                new MatchingOption { Text = "من 5 آلاف إلى 10 آلاف" },
+                new MatchingOption { Text = "أكثر من 10 آلاف" }
+            }
+                },
+new MatchingQuestion
+{
+    QuestionText = "ماهي المنطقة التي أنت منها؟",
+    Type = QuestionType.Choice,
+    Options = new List<MatchingOption>
+    {
+        new MatchingOption { Text = "الرياض" },
+        new MatchingOption { Text = "مكة المكرمة" },
+        new MatchingOption { Text = "المدينة المنورة" },
+        new MatchingOption { Text = "المنطقة الشرقية" },
+        new MatchingOption { Text = "عسير" },
+        new MatchingOption { Text = "جازان" },
+        new MatchingOption { Text = "تبوك" },
+        new MatchingOption { Text = "حائل" },
+        new MatchingOption { Text = "القصيم" },
+        new MatchingOption { Text = "الحدود الشمالية" },
+        new MatchingOption { Text = "الباحة" },
+        new MatchingOption { Text = "الجوف" },
+        new MatchingOption { Text = "نجران" },
+        new MatchingOption { Text = "غير ذالك" }
+    }
+},
+        new MatchingQuestion
+        {
+            QuestionText = "هل تدخن؟",
+            Type = QuestionType.Choice,
+            Options = new List<MatchingOption>
+            {
+                new MatchingOption { Text = "نعم" },
+                new MatchingOption { Text = "لا" }
+            }
+        },
+
+                new MatchingQuestion
+        {
+            QuestionText = "ما هو مؤهلك العلمي؟",
+            Type = QuestionType.MultiChoice,
+            Options = new List<MatchingOption>
+            {
+                new MatchingOption { Text = "ثانوي" },
+                new MatchingOption { Text = "دبلوم" },
+                new MatchingOption { Text = "بكالوريوس" },
+                new MatchingOption { Text = "ماجستير" },
+                new MatchingOption { Text = "دكتوراه" }
+            }
+        },
+
+                new MatchingQuestion
+        {
+            QuestionText = "ما هي اهتماماتك؟",
+            Type = QuestionType.MultiChoice,
+            Options = new List<MatchingOption>
+            {
+                new MatchingOption { Text = "الرياضة" },
+                new MatchingOption { Text = "التكنولوجيا" },
+                new MatchingOption { Text = "القراءة" },
+                new MatchingOption { Text = "السفر" },
+                new MatchingOption { Text = "الطبخ" }
+            }
+        },
+new MatchingQuestion
+{
+    QuestionText = "إلى أي فئة عمرية تنتمي؟",
+    Type = QuestionType.Choice,
+    Options = new List<MatchingOption>
+    {
+        new MatchingOption { Text = "أقل من 20 سنة" },
+        new MatchingOption { Text = "من 21 إلى 30 سنة" },
+        new MatchingOption { Text = "من 31 إلى 40 سنة" },
+        new MatchingOption { Text = "من 41 إلى 50 سنة" },
+        new MatchingOption { Text = "أكثر من 50 سنة" }
+    }
+},
+
+                    new MatchingQuestion
+            {
+                QuestionText = "هل أنت عسكري؟",
+                Type = QuestionType.Choice,
+                Options = new List<MatchingOption>
+                {
+                    new MatchingOption { Text = "نعم" },
+                    new MatchingOption { Text = "لا" }
+                }
+            },
+
+                        new MatchingQuestion
+            {
+                QuestionText = "هل تفضل الجلوس لوحدك أم مع مجموعة؟",
+                Type = QuestionType.Choice,
+                Options = new List<MatchingOption>
+                {
+                    new MatchingOption { Text = "أحب الجلوس مع مجموعة" },
+                    new MatchingOption { Text = "أفضل الجلوس بمفردي" }
+                }
+            },
+
+                        new MatchingQuestion
+            {
+                QuestionText = "هل تفضل العيش في مكان هادئ أو في مكان مليء بالحركة والنشاط؟",
+                Type = QuestionType.Choice,
+                Options = new List<MatchingOption>
+                {
+                    new MatchingOption { Text = "هادئ" },
+                    new MatchingOption { Text = "مليء بالحركة والنشاط" }
+                }
+            },
+
+
+        };
+    }
 }

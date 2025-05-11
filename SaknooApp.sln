@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saknoo.Domain", "Saknoo.Dom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saknoo.Infrastructure", "Saknoo.Infrastructure\Saknoo.Infrastructure.csproj", "{5F9FFA09-B384-41E5-AFAF-8B810205F68B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saknoo.Application.Tests", "Saknoo.Application.Tests\Saknoo.Application.Tests.csproj", "{D02F20F0-C467-4DB2-87FF-1034C476DBE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{5F9FFA09-B384-41E5-AFAF-8B810205F68B}.Release|x64.Build.0 = Release|Any CPU
 		{5F9FFA09-B384-41E5-AFAF-8B810205F68B}.Release|x86.ActiveCfg = Release|Any CPU
 		{5F9FFA09-B384-41E5-AFAF-8B810205F68B}.Release|x86.Build.0 = Release|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Debug|x64.Build.0 = Debug|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Debug|x86.Build.0 = Debug|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Release|x64.ActiveCfg = Release|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Release|x64.Build.0 = Release|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Release|x86.ActiveCfg = Release|Any CPU
+		{D02F20F0-C467-4DB2-87FF-1034C476DBE0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

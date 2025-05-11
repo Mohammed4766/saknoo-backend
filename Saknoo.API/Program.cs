@@ -1,10 +1,12 @@
 using Microsoft.IdentityModel.Tokens;
-using Saknoo.Infrastructure;
+using Saknoo.Infrastructure.Extensions;
 using Saknoo.Application.Extensions;
 using Saknoo.Infrastructure.Data.Seed;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Saknoo.API.Middlewares;
+using Saknoo.Infrastructure.Services;
 
 
 
@@ -63,6 +65,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
+
 var app = builder.Build();
 
 //Seeder
@@ -76,6 +80,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

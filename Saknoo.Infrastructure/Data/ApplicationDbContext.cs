@@ -19,6 +19,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<City> Cities { get; set; }
     public DbSet<Neighborhood> Neighborhoods { get; set; }
     public DbSet<AdImage> AdImages { get; set; }
+     public DbSet<MatchingQuestion> MatchingQuestions { get; set; } 
+    public DbSet<MatchingOption> MatchingOptions { get; set; } 
+    public DbSet<MatchingAnswer> MatchingAnswers { get; set; } 
 
 
 
@@ -34,6 +37,10 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         builder.ApplyConfiguration(new NationalityConfiguration());
         builder.ApplyConfiguration(new AdNeighborhoodConfiguration());
         builder.ApplyConfiguration(new AdImageConfiguration());
+        builder.ApplyConfiguration(new MatchingAnswerConfiguration());
+        builder.ApplyConfiguration(new MatchingOptionConfiguration());
+        builder.ApplyConfiguration(new MatchingQuestionConfiguration());
+        
 
 
         // Rename Identity Tables

@@ -19,6 +19,13 @@ Thumbs.db
 # Configuration secrets
 appsettings.json
 appsettings.Development.json
+secrets.json
+
+# Example settings (should be committed)
+!appsettings.Template.json
 
 # VS Code settings
 .vscode/
+
+# Azure publish settings
+*.Publish.xml

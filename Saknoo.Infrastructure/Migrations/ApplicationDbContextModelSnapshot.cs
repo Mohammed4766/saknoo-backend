@@ -253,6 +253,13 @@ namespace Saknoo.Infrastructure.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -320,6 +327,84 @@ namespace Saknoo.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("Saknoo.Domain.Entities.MatchingAnswer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Answer")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("MatchingQuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("MatchingQuestionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("MatchingAnswers");
+                });
+
+            modelBuilder.Entity("Saknoo.Domain.Entities.MatchingOption", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MatchingQuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MatchingQuestionId");
+
+                    b.ToTable("MatchingOptions");
+                });
+
+            modelBuilder.Entity("Saknoo.Domain.Entities.MatchingQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("QuestionText")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MatchingQuestions");
                 });
 
             modelBuilder.Entity("Saknoo.Domain.Entities.Nationality", b =>
@@ -507,6 +592,40 @@ namespace Saknoo.Infrastructure.Migrations
                     b.Navigation("Nationality");
                 });
 
+            modelBuilder.Entity("Saknoo.Domain.Entities.MatchingAnswer", b =>
+                {
+                    b.HasOne("Saknoo.Domain.Entities.ApplicationUser", null)
+                        .WithMany("Answers")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("Saknoo.Domain.Entities.MatchingQuestion", "MatchingQuestion")
+                        .WithMany("Answers")
+                        .HasForeignKey("MatchingQuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Saknoo.Domain.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MatchingQuestion");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Saknoo.Domain.Entities.MatchingOption", b =>
+                {
+                    b.HasOne("Saknoo.Domain.Entities.MatchingQuestion", "MatchingQuestion")
+                        .WithMany("Options")
+                        .HasForeignKey("MatchingQuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MatchingQuestion");
+                });
+
             modelBuilder.Entity("Saknoo.Domain.Entities.Neighborhood", b =>
                 {
                     b.HasOne("Saknoo.Domain.Entities.City", "City")
@@ -539,6 +658,15 @@ namespace Saknoo.Infrastructure.Migrations
             modelBuilder.Entity("Saknoo.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("Ads");
+
+                    b.Navigation("Answers");
+                });
+
+            modelBuilder.Entity("Saknoo.Domain.Entities.MatchingQuestion", b =>
+                {
+                    b.Navigation("Answers");
+
+                    b.Navigation("Options");
                 });
 
             modelBuilder.Entity("Saknoo.Domain.Entities.Nationality", b =>

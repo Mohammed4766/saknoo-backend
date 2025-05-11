@@ -20,5 +20,11 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
 .HasForeignKey(u => u.NationalityId)
 .OnDelete(DeleteBehavior.Restrict);
 
+        // Configure the relationship between ApplicationUser and MatchingAnswer.
+        builder.HasMany(u => u.Answers)
+               .WithOne(a => a.User) // Each answer belongs to one user.
+               .HasForeignKey(a => a.UserId) // Foreign key on MatchingAnswer.
+               .OnDelete(DeleteBehavior.Cascade); // Delete answers when the user is deleted.
+
     }
 }

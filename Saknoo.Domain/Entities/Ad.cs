@@ -4,8 +4,8 @@ public class Ad
 {
     public Guid Id { get; set; }
 
-    public required string UserId { get; set; }  
-    public required ApplicationUser User { get; set; } 
+    public required string UserId { get; set; }
+    public  ApplicationUser User { get; set; } = null!;
 
     public string Title { get; set; } = null!;
     public string? Description { get; set; }

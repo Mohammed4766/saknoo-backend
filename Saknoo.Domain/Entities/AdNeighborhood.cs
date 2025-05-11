@@ -7,7 +7,7 @@ public class AdNeighborhood
     public Guid AdId { get; set; }
     public int NeighborhoodId { get; set; }
 
-    public required Ad Ad { get; set; }
-    public required Neighborhood Neighborhood { get; set; }
+    public  Ad Ad { get; set; } = null!;
+    public  Neighborhood Neighborhood { get; set; } = null!;
 }
 
