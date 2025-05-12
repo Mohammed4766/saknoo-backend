@@ -29,8 +29,7 @@ public class GetAllAdsQueryValidator : AbstractValidator<GetAllAdsQuery>
      .WithMessage("CityId must be greater than 0.");
 
         RuleFor(x => x.NeighborhoodIds)
-            .Must(x => x.All(id => id > 0))
-            .When(x => x.NeighborhoodIds != null && x.NeighborhoodIds.Any())
+            .Must(ids => ids == null || !ids.Any() || ids.All(id => id > 0))
             .WithMessage("All Neighborhood IDs must be greater than 0.");
 
     }

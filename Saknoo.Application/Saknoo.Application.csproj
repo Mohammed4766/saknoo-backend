@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <Compile Include="User/Queries/GetMatchingPercentage/GetMatchingPercentageQueryValidator" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="../Saknoo.Infrastructure/Saknoo.Infrastructure.csproj" />
     <ProjectReference Include="..\Saknoo.Domain\Saknoo.Domain.csproj" />
   </ItemGroup>

@@ -1,0 +1,19 @@
+using System;
+using FluentValidation;
+
+namespace Saknoo.Application.User.Queries.GetMatchingPercentage;
+
+public class GetMatchingPercentageQueryValidator
+    : AbstractValidator<GetMatchingPercentageQuery>
+{
+    public GetMatchingPercentageQueryValidator()
+    {
+        RuleFor(x => x.UserId1)
+            .NotEmpty()
+            .WithMessage("UserId1 cannot be empty.");
+
+        RuleFor(x => x.UserId2)
+            .NotEmpty()
+            .WithMessage("UserId2 cannot be empty.");
+    }
+}

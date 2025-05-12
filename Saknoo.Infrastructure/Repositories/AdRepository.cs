@@ -70,7 +70,7 @@ public class AdRepository(ApplicationDbContext context) : IAdRepository
         {
             query = query.Where(a =>
                 a.Title.Contains(searchPhrase) ||
-                a.Description.Contains(searchPhrase));
+                (a.Description != null && a.Description.Contains(searchPhrase)));
         }
 
         if (cityId.HasValue)
