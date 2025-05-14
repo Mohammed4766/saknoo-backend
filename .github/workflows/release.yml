@@ -1,9 +1,8 @@
-name : saknoo-api-cd
+name: saknoo-api-cd
 
 on:
   push:
     branches: [ main ]
-    
 
 jobs:
   build:
@@ -24,51 +23,50 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
 
-    - name: publish
+    - name: Publish
       run: dotnet publish ./Saknoo.API/Saknoo.API.csproj -c Release -o ./publish
 
-    - name: Upload a Build Artifact
+    - name: Upload Build Artifact
       uses: actions/upload-artifact@v4.6.2
       with:
-       name: api-Artifact
-       path: publish
+        name: api-Artifact
+        path: ./publish
 
   deploy-dev:
-      environment:
-        name: 'Dev'
-        url: ${{steps.deploy-to-webpp.outputs.webapp-url}}
-      runs-on: ubuntu-latest
-      needs: build
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Dev'
 
-      steps:
-        - name: Download a Build Artifact
-          uses: actions/download-artifact@v4.3.0
-          with:
-           id: deploy-to-webpp
-           name: api-Artifact
+    steps:
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v4.3.0
+      with:
+        name: api-Artifact
 
-        - name: Azure WebApp
-          uses: Azure/webapps-deploy@v3.0.0
-          with:
-           app-name: 'saknoo-api-dev'
-           publish-profile: ${{secrets.PUNLISH_PROFILE_DEV}}
+    - name: Deploy to Azure WebApp (Dev)
+      uses: Azure/webapps-deploy@v3.0.0
+      with:
+        app-name: 'saknoo-api-dev'
+        publish-profile: ${{secrets.PUBLISH_PROFILE_DEV}}
+        package: ./api-Artifact
 
   deploy-prod:
-      environment:
-        name: 'Prod'
-        url: ${{steps.deploy-to-webpp.outputs.webapp-url}}
-      runs-on: ubuntu-latest
-      needs: deploy-dev
-  
-      steps:
-        - name: Download a Build Artifact
-          uses: actions/download-artifact@v4.3.0
-          with:
-           name: api-Artifact
-  
-        - name: Azure WebApp
-          uses: Azure/webapps-deploy@v3.0.0
-          id: deploy-to-webpp
-          with:
-           app-name: 'saknoo-api-prod'
-           publish-profile: ${{secrets.PUNLISH_PROFILE_PROD}}
+    runs-on: ubuntu-latest
+    needs: deploy-dev
+    environment:
+      name: 'Prod'
+
+    steps:
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v4.3.0
+      with:
+        name: api-Artifact
+
+    - name: Deploy to Azure WebApp (Prod)
+      id: deploy-to-webpp
+      uses: Azure/webapps-deploy@v3.0.0
+      with:
+        app-name: 'saknoo-api-prod'
+        publish-profile: ${{secrets.PUBLISH_PROFILE_PROD}}
+        package: ./api-Artifact
