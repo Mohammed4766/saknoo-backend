@@ -47,5 +47,5 @@ jobs:
           uses: Azure/webapps-deploy@v3.0.0
           with:
            app-name: 'saknoo-api-dev'
-           publish-profile: ${{serets.PUNLISH_PROFILE_DEV}}
+           publish-profile: ${{secrets.PUNLISH_PROFILE_DEV}}
 
