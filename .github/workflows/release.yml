@@ -48,7 +48,7 @@ jobs:
       uses: Azure/webapps-deploy@v3.0.0
       with:
         app-name: 'saknoo-api-dev'
-        publish-profile: ${{secrets.PUBLISH_PROFILE_DEV}}
+        publish-profile: ${{secrets.PUNLISH_PROFILE_DEV}}
         package: ./api-Artifact
 
   deploy-prod:
@@ -68,5 +68,5 @@ jobs:
       uses: Azure/webapps-deploy@v3.0.0
       with:
         app-name: 'saknoo-api-prod'
-        publish-profile: ${{secrets.PUBLISH_PROFILE_PROD}}
+        publish-profile: ${{secrets.PUNLISH_PROFILE_PROD}}
         package: ./api-Artifact
