@@ -3,8 +3,10 @@ using Saknoo.Domain.Exceptions;
 
 namespace Saknoo.API.Middlewares;
 
-public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
+public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger, IWebHostEnvironment env)
 {
+
+
     public async Task Invoke(HttpContext context)
     {
         try
@@ -13,17 +15,11 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Unhandled Exception");
+            var actualException = ex.InnerException ?? ex;
+            logger.LogError(actualException, "Unhandled Exception");
 
             context.Response.ContentType = "application/json";
-
-            var response = new ErrorResponse
-            {
-                Success = false,
-                Message = ex.Message
-            };
-
-            context.Response.StatusCode = ex switch
+            context.Response.StatusCode = actualException switch
             {
                 NotFoundException => StatusCodes.Status404NotFound,
                 ValidationException => StatusCodes.Status400BadRequest,
@@ -32,15 +28,24 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
                 _ => StatusCodes.Status500InternalServerError
             };
 
-            if (ex is ValidationException validationEx)
+            var response = new ErrorResponse
             {
-                response.Errors = validationEx.Errors;
+                Success = false,
+                Message = env.IsDevelopment()
+                          ? actualException.Message
+                          : "An unexpected error occurred. Please try again later."
+            };
+
+            if (actualException is ValidationException validationEx)
+            {
+                response.Errors = env.IsDevelopment() ? validationEx.Errors : null;
             }
 
             await context.Response.WriteAsJsonAsync(response);
         }
     }
 }
+
 
 public class ErrorResponse
 {

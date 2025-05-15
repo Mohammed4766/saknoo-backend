@@ -6,17 +6,24 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Saknoo.API.Middlewares;
-using Saknoo.Infrastructure.Services;
+using Serilog;
+
 
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 
+
+
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Host.UseSerilog((context, services, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+});
 
 builder.Services.AddAuthentication(options =>
 {
@@ -82,7 +89,7 @@ if (app.Environment.IsDevelopment())
 
 
 
-
+app.UseSerilogRequestLogging();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthentication();

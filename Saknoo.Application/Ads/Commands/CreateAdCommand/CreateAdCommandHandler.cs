@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Saknoo.Application.User;
 using Saknoo.Domain.Entities;
 using Saknoo.Domain.Interfaces;
@@ -10,13 +11,22 @@ namespace Saknoo.Application.Ads.Commands.CreateAdCommand;
 public class CreateAdCommandHandler(
     IAdRepository adRepository,
     IUserContext userContext,
-    IBlobStorageService blobStorageService) : IRequestHandler<CreateAdCommand, Guid>
+    IBlobStorageService blobStorageService,
+    ILogger<CreateAdCommandHandler> logger
+    ) : IRequestHandler<CreateAdCommand, Guid>
 {
     public async Task<Guid> Handle(CreateAdCommand request, CancellationToken cancellationToken)
     {
+        logger.LogInformation("Starting execution of CreateAdCommand");
+
         var currentUser = userContext.GetCurrentUser();
         if (currentUser == null)
+        {
+            logger.LogWarning("Unauthorized request: current user is null");
             throw new UnauthorizedAccessException();
+        }
+
+        logger.LogInformation("Creating a new ad for user: {UserId}", currentUser.UserId);
 
         var ad = new Ad
         {
@@ -39,7 +49,10 @@ public class CreateAdCommandHandler(
         foreach (var image in request.Images)
         {
             using var stream = image.OpenReadStream();
-            var imageUrl = await blobStorageService.UploadToBlobAsync(stream, $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+            var imageUrl = await blobStorageService.UploadToBlobAsync(stream, fileName);
+
+            logger.LogDebug("Uploaded image for ad: {ImageUrl}", imageUrl);
 
             ad.Images.Add(new AdImage
             {
@@ -48,7 +61,11 @@ public class CreateAdCommandHandler(
         }
 
         await adRepository.CreateAsync(ad);
+
+        logger.LogInformation("Ad created successfully: {AdId}", ad.Id);
+
         return ad.Id;
     }
 }
+
 

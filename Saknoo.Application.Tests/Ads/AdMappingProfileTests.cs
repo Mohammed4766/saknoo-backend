@@ -54,7 +54,7 @@ public class AdMappingProfileTests
             Description = "Ad description",
             Price = 1000,
             HasApartment = true,
-            UserId = "user123", // ✅ أضف هذا السطر
+            UserId = "user123", 
             User = new ApplicationUser { Id = "user123", UserName = "mohammed" },
             City = new City { Id = 1, Name = "Riyadh" },
             Images = new List<AdImage>
