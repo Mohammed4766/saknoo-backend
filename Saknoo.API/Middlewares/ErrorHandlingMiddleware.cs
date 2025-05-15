@@ -32,7 +32,7 @@ public class ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandling
             {
                 Success = false,
                 Message = env.IsDevelopment()
-                          ? actualException.Message
+                           ? $"{actualException.GetType().Name}: {actualException.Message} \n {actualException.StackTrace}"
                           : "An unexpected error occurred. Please try again later."
             };
 
