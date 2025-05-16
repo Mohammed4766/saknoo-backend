@@ -1,88 +1,94 @@
-// using FluentAssertions;
-// using Moq;
-// using Saknoo.Application.Ads.Commands.CreateAdCommand;
-// using Saknoo.Application.User;
-// using Saknoo.Domain.Constants;
-// using Saknoo.Domain.Entities;
-// using Saknoo.Domain.Repositories;
+using FluentAssertions;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Saknoo.Application.Ads.Commands.CreateAdCommand;
+using Saknoo.Application.User;
+using Saknoo.Domain.Constants;
+using Saknoo.Domain.Entities;
+using Saknoo.Domain.Interfaces;
+using Saknoo.Domain.Repositories;
 
-// namespace Saknoo.Application.Tests.Ads.Commands;
-// public class CreateAdCommandHandlerTests
-// {
-//     [Fact]
-//     public async Task Handle_ShouldCreateAdSuccessfully_WhenUserIsAuthenticated()
-//     {
-//         // Arrange
-//         var currentUser = new CurrentUser(
-//             UserId: "1",
-//             UserName: "0506984766",
-//             Roles: new[] { UserRoles.Admin, UserRoles.User }
-//         );
+namespace Saknoo.Application.Tests.Ads.Commands;
 
-//         var command = new CreateAdCommand
-//         {
-//             Title = "Test Ad",
-//             Description = "Test Description",
-//             Price = 1000,
-//             PriceFrom = 500,
-//             PriceTo = 1500,
-//             HasApartment = true,
-//             CityId = 1,
-//             NeighborhoodIds = new List<int> { 1, 2 },
-//             ImageUrls = new List<string> { "image1.jpg", "image2.jpg" }
-//         };
+public class CreateAdCommandHandlerTests
+{
+    [Fact]
+    public async Task Handle_ShouldCreateAdSuccessfully_WhenUserIsAuthenticated()
+    {
+        var currentUser = new CurrentUser(
+            UserId: "1",
+            UserName: "0506984766",
+            Roles: new[] { UserRoles.User }
+        );
 
-//         var mockUserContext = new Mock<IUserContext>();
-//         mockUserContext.Setup(x => x.GetCurrentUser()).Returns(currentUser);
+        var fakeImages = new List<IFormFile>
+        {
+            CreateFakeFormFile("image1.jpg"),
+            CreateFakeFormFile("image2.jpg")
+        };
 
-//         var mockAdRepository = new Mock<IAdRepository>();
-//         var newAdGuid = Guid.NewGuid();
-//         mockAdRepository.Setup(r => r.CreateAsync(It.IsAny<Ad>())).ReturnsAsync(new Ad
-//         {
-//             Id = newAdGuid, // Return the Ad with a valid Guid
-//             UserId = currentUser.UserId,
-//             Title = command.Title,
-//             Description = command.Description,
-//             Price = command.Price,
-//             PriceFrom = command.PriceFrom,
-//             PriceTo = command.PriceTo,
-//             HasApartment = command.HasApartment,
-//             CityId = command.CityId,
-//             AdNeighborhoods = command.NeighborhoodIds.Select(id => new AdNeighborhood
-//             {
-//                 NeighborhoodId = id
-//             }).ToList(),
-//             Images = command.ImageUrls.Select(url => new AdImage
-//             {
-//                 ImageUrl = url
-//             }).ToList()
-//         });
+        var command = new CreateAdCommand
+        {
+            Title = "Test Ad",
+            Description = "Test Description",
+            Price = 1000,
+            PriceFrom = 500,
+            PriceTo = 1500,
+            HasApartment = true,
+            CityId = 1,
+            NeighborhoodIds = new List<int> { 1, 2 },
+            Images = fakeImages
+        };
 
-//         var handler = new CreateAdCommandHandler(
-//             adRepository: mockAdRepository.Object,
-//             userContext: mockUserContext.Object
-//         );
+        var mockUserContext = new Mock<IUserContext>();
+        mockUserContext.Setup(x => x.GetCurrentUser()).Returns(currentUser);
 
-//         // Act
-//         var result = await handler.Handle(command, CancellationToken.None);
+        var mockAdRepository = new Mock<IAdRepository>();
+        mockAdRepository.Setup(r => r.CreateAsync(It.IsAny<Ad>()))
+     .ReturnsAsync((Ad ad) =>
+     {
+         ad.Id = Guid.NewGuid();
+         return ad;
+     });
 
-//         // Assert
-//         result.Should().NotBe(Guid.Empty); // Ensure that a valid GUID is returned
+        var mockBlobService = new Mock<IBlobStorageService>();
+        mockBlobService.Setup(x => x.UploadToBlobAsync(It.IsAny<Stream>(), It.IsAny<string>()))
+            .ReturnsAsync((Stream _, string fileName) => $"https://fake.blob.core.windows.net/{fileName}");
 
-//         // Verify that CreateAsync was called with the correct Ad properties
-//         mockAdRepository.Verify(r => r.CreateAsync(It.Is<Ad>(a =>
-//             a.Title == command.Title &&
-//             a.UserId == currentUser.UserId &&
-//             a.Description == command.Description &&
-//             a.Price == command.Price &&
-//             a.HasApartment == command.HasApartment &&
-//             a.CityId == command.CityId &&
-//             a.Images.Count == 2 &&
-//             a.AdNeighborhoods.Count == 2
-//         )), Times.Once);
-//     }
+        var mockLogger = new Mock<ILogger<CreateAdCommandHandler>>();
 
+        var handler = new CreateAdCommandHandler(
+            adRepository: mockAdRepository.Object,
+            userContext: mockUserContext.Object,
+            blobStorageService: mockBlobService.Object,
+            logger: mockLogger.Object
+        );
 
+        var result = await handler.Handle(command, CancellationToken.None);
 
+        result.Should().NotBeEmpty();
 
-// }
+        mockAdRepository.Verify(r => r.CreateAsync(It.Is<Ad>(a =>
+            a.Title == command.Title &&
+            a.UserId == currentUser.UserId &&
+            a.Description == command.Description &&
+            a.Price == command.Price &&
+            a.HasApartment == command.HasApartment &&
+            a.CityId == command.CityId &&
+            a.Images.Count == 2 &&
+            a.AdNeighborhoods.Count == 2
+        )), Times.Once);
+    }
+
+    private IFormFile CreateFakeFormFile(string fileName)
+    {
+        var content = "Fake file content";
+        var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(content));
+        return new FormFile(stream, 0, stream.Length, "file", fileName)
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = "image/jpeg"
+        };
+    }
+}
